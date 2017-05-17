@@ -1,0 +1,14 @@
+{
+  "intents": [
+    {
+      "slots": [
+        {
+          "name": "status",
+          "type": "status"
+        }
+      ],
+      "intent": "Plug"
+    }
+  ]
+}
+
