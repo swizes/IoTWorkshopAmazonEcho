@@ -22,7 +22,6 @@ print("Initial Power Status" + Power_Status)
 def IoT_to_Raspberry_Change_Power(ShadowPayload):
     global Power_Status
     # Desired = POWER change
-    print(" I AM IN THE FUNCTION")
     checkPlug()
     sp = SmartPlug('192.168.99.115','225564')
     if ( ShadowPayload == "ON" and Power_Status == "OFF"): #Check if machine is indeed OFF

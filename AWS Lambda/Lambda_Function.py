@@ -118,8 +118,8 @@ def smartplug_resspone(intent, session):
     card_title = "Plug"
     should_end_session = False
 
-    speech_output = "DUNNO"
-    reprompt_text = "DUNNO"
+    speech_output = "Unknown command"
+    reprompt_text = "Unknown command"
 
     if 'slots' in intent:
         if 'status' in intent['slots']:
