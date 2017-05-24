@@ -23,9 +23,16 @@ def IoT_to_Raspberry_Change_Power(ShadowPayload):
     global Power_Status
     # Desired = POWER change
     checkPlug()
-    sp = SmartPlug('192.168.99.115','225564')
+    print(" I AM IN THE POWER CHANGE FUNCTION")
+    print("ShadowPayload" + ShadowPayload)
+    print("Power Status" + Power_Status)
+
+    checkPlug()
+    sp = SmartPlug('192.168.99.113','225564')
     if ( ShadowPayload == "ON" and Power_Status == "OFF"): #Check if machine is indeed OFF
-    	sp.state = 'ON'
+        print("Power status is off and shadowpayload is on")
+        sp.state = 'ON'
+        print("Turned plug on")
         checkPlug()
         JSONPayload = '{ "state" : {'+\
                             '"reported": {'+\
@@ -36,7 +43,9 @@ def IoT_to_Raspberry_Change_Power(ShadowPayload):
         myDeviceShadow.shadowUpdate(JSONPayload, IoTShadowCallback_Update, 5) #Send the new status as REPORTED values
 
     elif ( ShadowPayload == "OFF" and Power_Status == "ON"): #Check if machine is indeed ON
+        print("Power status is on and shadowpayload is off")
         sp.state = 'OFF'
+        print("Turned plug off")
         checkPlug()
         JSONPayload = '{ "state" : {'+\
                             '"reported": {'+\
@@ -51,16 +60,17 @@ def IoT_to_Raspberry_Change_Power(ShadowPayload):
 
 
 def checkPlug():
-	global Power_Status
-	sp = SmartPlug('192.168.99.115','225564')
+    global Power_Status
+    sp = SmartPlug('192.168.99.113','225564')
     # Get values if available otherwise return N/A
-    	print(sp.current_consumption)
-    	print(sp.temperature)
-    	print(sp.total_consumption)
-    	if(sp.state == "ON"):
-        	Power_Status = "ON"
-    	else:
-        	Power_Status = "OFF"
+        print("Checking Plug")
+        print(sp.current_consumption)
+        print(sp.temperature)
+        print(sp.total_consumption)
+        if(sp.state == "ON"):
+            Power_Status = "ON"
+        else:
+            Power_Status = "OFF"
 
 
 # Shadow callback for when a DELTA is received (this happens when Lamda does set a DESIRED value in IoT)
@@ -150,14 +160,13 @@ if __name__ == '__main__':
     try:
         print 'RasPi started, Press Ctrl-C to quit.'
         checkPlug()
-        print(Power_Status)
         while True:
-		         #pass
+                 #pass
                  jsonChecker()
                 
             # Listen on deltas from the IoT Shadow
-			#myDeviceShadow.shadowGet(IoTShadowCallback_Get, 5)
-			#myDeviceShadow.shadowRegisterDeltaCallback(IoTShadowCallback_Delta)            
+            #myDeviceShadow.shadowGet(IoTShadowCallback_Get, 5)
+            #myDeviceShadow.shadowRegisterDeltaCallback(IoTShadowCallback_Delta)            
     finally:
         myAWSIoTMQTTShadowClient.shadowUnregisterDeltaCallback()
         myAWSIoTMQTTShadowClient.disconnect()
